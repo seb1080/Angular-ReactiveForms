@@ -1,23 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm, FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
-import { Customer } from './customer';
+import { Customer } from "./customer";
 
 @Component({
-  selector: 'app-client',
-  templateUrl: './client.component.html',
-  styleUrls: ['./client.component.css']
+  selector: "app-client",
+  templateUrl: "./client.component.html",
+  styleUrls: ["./client.component.css"]
 })
 export class ClientComponent implements OnInit {
-  client = new Customer();
   clientForm: FormGroup;
+  client = new Customer();
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
-  ngOnInit():void {
+  ngOnInit(): void {
     this.clientForm = this.fb.group({
-      firstName: '',
-      lastName: ''
-    })
+      firstName: ["", Validators.required],
+      lastName: ["", Validators.required],
+      email: ["", Validators.required],
+      notification: '',
+      sendCatalog: true
+    });
+  }
+
+  save() {
+    console.log(`save ${this.clientForm}`);
+  }
+
+
+  setNotification(notifyVia: string): void {
+    const phoneControl = this.clientForm.get('phone');
+    if (notifyVia === 'text') {
+      phoneControl.setValidators(Validators.required);
+    } else {
+      phoneControl.clearValidators();
+    }
+    phoneControl.updateValueAndValidity();
+
   }
 }
