@@ -25,3 +25,32 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+---
+
+# Personal Note
+
+## Accessing the Form Model Properties
+
+```js
+customerForm.controls.firstName.valid;
+
+customerForm.get("firstName").valid;
+```
+
+## Using **setValues** and **patchValue**
+
+```js
+// for all values of the form
+this.customerForm.setValue({
+  firstName: "Seb",
+  lastName: "Blais",
+  email: "sbf@email.com"
+});
+
+// for some values of the form
+this.customerForm.patchValue({
+  firstName: "Seb",
+  lastName: "Blais"
+});
+```
