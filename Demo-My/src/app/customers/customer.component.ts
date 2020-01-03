@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
 import { Customer } from "./customer";
 
@@ -12,19 +12,24 @@ export class CustomerComponent implements OnInit {
   customerForm: FormGroup; // form model, to bing with HTML
   customer = new Customer(); // data model, to be send to the BE
 
-  constructor() {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.customerForm = new FormGroup({
-      firstName: new FormControl(),
-      lastName: new FormControl(),
-      email: new FormControl(),
-      sendCatalog: new FormControl(true)
+    this.customerForm = this.fb.group({
+      firstName: [
+        "First Name (required)",
+        [Validators.required, Validators.minLength(3)]
+      ],
+      lastName: [
+        "Last Name (required)",
+        [Validators.required, Validators.minLength(50)]
+      ],
+      email: ["Email (required)", [Validators.required, Validators.email]],
+      sendCatalog: [true]
     });
   }
 
   populateTestData(): void {
-    
     this.customerForm.patchValue({
       firstName: "default firstName",
       lastName: "default lastName",
