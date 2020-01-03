@@ -86,7 +86,13 @@ export class CustomerComponent implements OnInit {
       phone: "",
       notification: "email",
       rating: [null, ratingRangeCreator(1, 5)],
-      sendCatalog: true
+      sendCatalog: true,
+      addressType: "home",
+      street1: "",
+      street2: "",
+      city: "",
+      state: "",
+      zip: ""
     });
   }
 
