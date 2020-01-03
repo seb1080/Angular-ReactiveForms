@@ -1,7 +1,32 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+  ValidatorFn
+} from "@angular/forms";
 
 import { Customer } from "./customer";
+
+function ratingRange(c: AbstractControl): { [key: string]: boolean } | null {
+  if (c.value !== null && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
+    return { range: true };
+  }
+  return null;
+}
+
+function ratingRangeCreator(min: number, max: number): ValidatorFn {
+  return (c: AbstractControl): { [key: string]: boolean } | null => {
+    if (
+      c.value !== null &&
+      (isNaN(c.value) || c.value < min || c.value > max)
+    ) {
+      return { range: true };
+    }
+    return null;
+  };
+}
 
 @Component({
   selector: "app-customer",
@@ -24,9 +49,16 @@ export class CustomerComponent implements OnInit {
         "Last Name (required)",
         [Validators.required, Validators.maxLength(50)]
       ],
-      email: ["Email (required)", [Validators.required, Validators.email]],
+      emailGroup: this.fb.group({
+        email: ["Email (required)", [Validators.required, Validators.email]],
+        confirmEmail: [
+          "Email (required)",
+          [Validators.required, Validators.email]
+        ]
+      }),
       phone: "",
       notification: "email",
+      rating: [null, ratingRangeCreator(1, 5)],
       sendCatalog: true
     });
   }

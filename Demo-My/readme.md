@@ -80,3 +80,69 @@ myControl.clearValidators();
 
 myControl.updateValueAndValidity();
 ```
+
+```html
+<label class="form-check-label">
+  <input
+    class="form-check-input"
+    type="radio"
+    value="email"
+    formControlName="notification"
+    (click)="setNotification('email')"
+  />
+  Email
+</label>
+```
+
+```js
+setNotification(notifiyVia: string): void {
+    const phoneControl = this.customerForm.get("phone");
+    if (notifiyVia === "text") {
+      phoneControl.setValidators(Validators.required);
+    } else {
+      phoneControl.clearValidators();
+    }
+    phoneControl.updateValueAndValidity();
+  }
+```
+
+## Custom Validator
+
+```js
+function myValidator(c: AbstactControl): { [Key: string]: boolean } | null {
+  if (somethingIsWrong) {
+    return { myValidator: true };
+  }
+  return null;
+}
+```
+
+## Custom Validator with Parameters
+
+```js
+function myValidator(param: any): ValidatorFn {
+  return (c: AbstractControl): { [key: string]: boolean } | null => {
+    if (somethingIsWrong) {
+      return { myvalidator: true };
+    }
+    return null;
+  };
+}
+```
+
+## Cross-field Validator: Nested FormGroup
+
+```js
+this.customerForm = this.fb.group({
+  firstName: [
+    "",
+    Validators.required,
+    Validators.minLength(3) // Async Validators can by use for server side validation
+  ],
+  lastName: [{ value: "n/a", disabled: true }],
+  avaibility: this.fb.group({
+    start: ["", Validators.required],
+    end: ["", Validators.required]
+  })
+});
+```
