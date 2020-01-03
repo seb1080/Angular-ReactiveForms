@@ -71,21 +71,11 @@
               type="email"
               formControlName="email"
               [ngClass]="{
-                'is-invalid':
-                  (customerForm.get('emailGroup.email').touched ||
-                    customerForm.get('emailGroup.email').dirty) &&
-                  !customerForm.get('emailGroup.email').valid
+                'is-invalid': emailMessage
               }"
             />
             <span class="invalid-feedback">
-              <span
-                *ngIf="customerForm.get('emailGroup.email').errors?.required"
-              >
-                Please enter your email address.
-              </span>
-              <span *ngIf="customerForm.get('emailGroup.email').errors?.email">
-                Please enter a valid email address.
-              </span>
+              {{ emailMessage }}
             </span>
           </div>
         </div>
@@ -101,28 +91,11 @@
               type="confirmEmail"
               formControlName="confirmEmail"
               [ngClass]="{
-                'is-invalid':
-                  (customerForm.get('emailGroup.confirmEmail').touched ||
-                    customerForm.get('emailGroup.confirmEmail').dirty) &&
-                  !customerForm.get('emailGroup.confirmEmail').valid
+                'is-invalid': emailMessage
               }"
             />
             <span class="invalid-feedback">
-              <span
-                *ngIf="
-                  customerForm.get('emailGroup.confirmEmail').errors?.required
-                "
-              >
-                Please enter your email address.
-              </span>
-              <span
-                *ngIf="
-                  customerForm.get('emailGroup.confirmEmail').errors
-                    ?.confirmEmail
-                "
-              >
-                Please enter a valid email address.
-              </span>
+              {{ emailMessage }}
             </span>
           </div>
         </div>
@@ -156,7 +129,6 @@
                 type="radio"
                 value="email"
                 formControlName="notification"
-                (click)="setNotification('email')"
               />
               Email
             </label>
@@ -169,7 +141,6 @@
                 type="radio"
                 value="text"
                 formControlName="notification"
-                (click)="setNotification('text')"
               />
               SMS
             </label>

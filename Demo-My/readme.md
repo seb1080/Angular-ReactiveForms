@@ -146,3 +146,52 @@ this.customerForm = this.fb.group({
   })
 });
 ```
+
+## Cross-field Validation: Custom Validator
+
+```js
+function dataCompare(c: AbstractControl): {[key:string]: boolean | null {
+  let startControl = c.get('start')
+  let endControl = c.get('end');
+  if (startControl.value !== endControl.value) {
+    return { 'match': true };
+  }
+  retrun null;
+}
+
+this.customerForm = this.fb.group({
+  firstName: ['', [Validators.required, Validators.minLength(3)]],
+  lastName: ['', [Validators.required, Validators.maxLength(50)]],
+  avaibility: this.fb.group({
+    start: ['', Validators.required],
+    end: ['', Validators.required]
+  }, { validator: dateCompare })
+});
+```
+
+## Reacting to Changes
+
+```js
+// subscribing to a event then trigger a function on value change
+this.customerForm
+  .get("notification")
+  .valueChanges.subscribe(value => this.setNotification(value));
+```
+
+## Reactive Transformations
+
+### debounceTime()
+
+- Ignores events until a specific time has passed without another event.
+- debounceTime(1000) waits for 1000 ms of no events before emitting another event
+
+### throttleTime()
+
+- Emits a value, then ignores subsequent values for a specific amount of time.
+
+### distincUnitChanged
+
+- Suppresses duplicate consecutive items
+
+```js
+```

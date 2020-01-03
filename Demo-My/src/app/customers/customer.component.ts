@@ -7,7 +7,15 @@ import {
   ValidatorFn
 } from "@angular/forms";
 
+import { debounceTime } from "rxjs/operators";
+
 import { Customer } from "./customer";
+
+function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
+  const emailControl = c.get("email");
+  const confirmControl = c.get("confirmEmail");
+  return emailControl.value === confirmControl.value ? null : { match: true };
+}
 
 function ratingRange(c: AbstractControl): { [key: string]: boolean } | null {
   if (c.value !== null && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
@@ -36,10 +44,29 @@ function ratingRangeCreator(min: number, max: number): ValidatorFn {
 export class CustomerComponent implements OnInit {
   customerForm: FormGroup; // form model, to bing with HTML
   customer = new Customer(); // data model, to be send to the BE
+  emailMessage: string;
+
+  private validationMessages = {
+    required: "Please enter your email address.",
+    email: "Please enter a valid email address."
+  };
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.initForm();
+
+    this.customerForm
+      .get("notification")
+      .valueChanges.subscribe(value => this.setNotification(value));
+
+    const emailControl = this.customerForm.get("emailGroup.email");
+    emailControl.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe(value => this.setErrorMessage(emailControl));
+  }
+
+  initForm() {
     this.customerForm = this.fb.group({
       firstName: [
         "First Name (required)",
@@ -49,13 +76,13 @@ export class CustomerComponent implements OnInit {
         "Last Name (required)",
         [Validators.required, Validators.maxLength(50)]
       ],
-      emailGroup: this.fb.group({
-        email: ["Email (required)", [Validators.required, Validators.email]],
-        confirmEmail: [
-          "Email (required)",
-          [Validators.required, Validators.email]
-        ]
-      }),
+      emailGroup: this.fb.group(
+        {
+          email: ["valid@email.com", [Validators.required, Validators.email]],
+          confirmEmail: ["", [Validators.required, Validators.email]]
+        },
+        { validator: emailMatcher }
+      ),
       phone: "",
       notification: "email",
       rating: [null, ratingRangeCreator(1, 5)],
@@ -84,5 +111,14 @@ export class CustomerComponent implements OnInit {
       phoneControl.clearValidators();
     }
     phoneControl.updateValueAndValidity();
+  }
+
+  setErrorMessage(c: AbstractControl): void {
+    this.emailMessage = "";
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors)
+        .map(key => this.validationMessages[key])
+        .join(" ");
+    }
   }
 }
