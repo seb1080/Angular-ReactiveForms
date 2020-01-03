@@ -22,10 +22,12 @@ export class CustomerComponent implements OnInit {
       ],
       lastName: [
         "Last Name (required)",
-        [Validators.required, Validators.minLength(50)]
+        [Validators.required, Validators.maxLength(50)]
       ],
       email: ["Email (required)", [Validators.required, Validators.email]],
-      sendCatalog: [true]
+      phone: "",
+      notification: "email",
+      sendCatalog: true
     });
   }
 
@@ -40,5 +42,15 @@ export class CustomerComponent implements OnInit {
   save() {
     console.log(this.customerForm);
     console.log("Saved: " + JSON.stringify(this.customerForm.value));
+  }
+
+  setNotification(notifiyVia: string): void {
+    const phoneControl = this.customerForm.get("phone");
+    if (notifiyVia === "text") {
+      phoneControl.setValidators(Validators.required);
+    } else {
+      phoneControl.clearValidators();
+    }
+    phoneControl.updateValueAndValidity();
   }
 }

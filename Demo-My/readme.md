@@ -68,3 +68,15 @@ ngOnInit() {
     });
   }
 ```
+
+## Adjusting Validation Rules at Runtime
+
+```js
+myControl.setValidators(Validators.required);
+
+myControl.setValidators([Validators.required, Validators.maxLength(30)]);
+
+myControl.clearValidators();
+
+myControl.updateValueAndValidity();
+```
