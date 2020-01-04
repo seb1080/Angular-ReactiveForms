@@ -193,5 +193,19 @@ this.customerForm
 
 - Suppresses duplicate consecutive items
 
+## FromArray
+
 ```js
+this.myArray = new FormArray([formControl, formGroup]);
+
+this.myArray = this.fb.array([formControl, formGroup]);
+```
+
+```html
+<div
+  formArrayName="addresses"
+  *ngFor="let address of addresses.controls; let i=index"
+>
+  <div [formGroupName]="i"></div>
+</div>
 ```
