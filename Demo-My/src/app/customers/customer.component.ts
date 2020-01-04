@@ -48,7 +48,7 @@ export class CustomerComponent implements OnInit {
   emailMessage: string;
 
   get addresses(): FormArray {
-    return <FormArray>this.customerForm.get("addressses");
+    return <FormArray>this.customerForm.get("addresses");
   }
 
   private validationMessages = {

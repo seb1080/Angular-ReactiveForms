@@ -165,8 +165,11 @@
       </div>
 
       <div *ngIf="customerForm.get('sendCatalog').value">
-        <div formArrayName="addresses">
-          <div formGroupName="0">
+        <div
+          formArrayName="addresses"
+          *ngFor="let address of addresses.controls; let i = index"
+        >
+          <div [formGroupName]="i">
             <div class="form-group row mb-2">
               <label class="col-md-2 col-form-label pt-0">Address Type</label>
               <div class="col-md-8">
@@ -207,13 +210,15 @@
             </div>
 
             <div class="form-group row mb-2">
-              <label class="col-md-2 col-form-label" for="street1Id"
+              <label
+                class="col-md-2 col-form-label"
+                attr.for="{{ 'street1Id' + 1 }}"
                 >Street Address 1</label
               >
               <div class="col-md-8">
                 <input
                   class="form-control"
-                  id="street1Id"
+                  id="{{ 'street1Id' + 1 }}"
                   type="text"
                   placeholder="Street address"
                 />
@@ -221,13 +226,15 @@
             </div>
 
             <div class="form-group row mb-2">
-              <label class="col-md-2 col-form-label" for="street2Id"
+              <label
+                class="col-md-2 col-form-label"
+                attr.for="{{ 'street2Id' + 1 }}"
                 >Street Address 2</label
               >
               <div class="col-md-8">
                 <input
                   class="form-control"
-                  id="street2Id"
+                  id="{{ 'street2Id' + 1 }}"
                   type="text"
                   placeholder="Street address (second line)"
                 />
@@ -235,13 +242,15 @@
             </div>
 
             <div class="form-group row mb-2">
-              <label class="col-md-2 col-form-label" for="cityId"
+              <label
+                class="col-md-2 col-form-label"
+                attr.for="{{ 'cityId' + 1 }}"
                 >City, State, Zip Code</label
               >
               <div class="col-md-3">
                 <input
                   class="form-control"
-                  id="cityId"
+                  id="{{ 'cityId' + 1 }}"
                   type="text"
                   placeholder="City"
                 />
@@ -264,7 +273,7 @@
               <div class="col-md-2">
                 <input
                   class="form-control"
-                  id="zipId"
+                  id="{{ 'zipId' + 1 }}"
                   type="number"
                   placeholder="Zip Code"
                 />
