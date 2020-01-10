@@ -71,6 +71,10 @@ export class CustomerComponent implements OnInit {
       .subscribe(value => this.setErrorMessage(emailControl));
   }
 
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
+  }
+
   buildAddress(): FormGroup {
     return this.fb.group({
       addressType: "home",
